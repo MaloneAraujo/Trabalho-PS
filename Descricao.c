@@ -25,9 +25,12 @@ A avaliação do trabalho será realizada com base nos seguintes aspectos:
 
 >>>Grupos
 Execução:
-- Malone (1-Estr Mem e Reg)
-- Gabriel Silveira (2-Decod Inst e Mod End)
-- Gabriel Britto (3-Inst Log Art e Pt Flut)
+- Malone           (1- Estrutura de Memória e Registradores)
+- Gabriel Silveira (2- Decodificador de Instruções e Modos de Endereçamento)
+- Gabriel Britto   (3- Instruções Lógicas, Aritméticas e de Ponto Flutuante)
+- ⁠João Victor      (4- (Instruções de Movimentação de Dados e Desvios)
 
 Interface Visual:
-- Vitor (6-Apr Graf Mem)
+- Vitor           (6- Apresentação Gráfica da Memória e Código)
+- ⁠André           (5- Layout Principal e Integração do Sistema)
+- Yago            (7- Apresentação Gráfica dos Registradores e Documentação)
