@@ -1,0 +1,7 @@
+#ifndef MEMORIA_H
+#define MEMORIA_H
+
+//REGISTRADORES PADROES (A,X,L,B,S,T,F,PC,SW)
+//MEMORIA DE +1KB
+
+#endif
