@@ -28,9 +28,12 @@ Execução:
 - Malone           (1- Estrutura de Memória e Registradores)
 - Gabriel Silveira (2- Decodificador de Instruções e Modos de Endereçamento)
 - Gabriel Britto   (3- Instruções Lógicas, Aritméticas e de Ponto Flutuante)
-- ⁠João Victor      (4- (Instruções de Movimentação de Dados e Desvios)
+- ⁠João Victor      (4- Instruções de Movimentação de Dados e Desvios)
 
 Interface Visual:
 - Vitor           (6- Apresentação Gráfica da Memória e Código)
 - ⁠André           (5- Layout Principal e Integração do Sistema)
 - Yago            (7- Apresentação Gráfica dos Registradores e Documentação)
+
+git config --global user.name "MaloneAraujo"
+git config --global user.email "mmdaraujo@inf.ufpel.edu.br"
