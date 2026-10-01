@@ -1,6 +1,8 @@
+// Bibliotecas
 #include "raylib.h"
 #include <stdio.h>
 
+// Dimensão total da memória simulada
 #define MEMORY_SIZE 1024
 #define BYTES_PER_ROW 16
 
@@ -9,12 +11,13 @@ int main(void) {
     const int screenWidth = 800;
     const int screenHeight = 600;
     InitWindow(screenWidth, screenHeight, "SIC/XE - Visualização de Memória (Pessoa 6)");
+    // Taxa de atualização
     SetTargetFPS(60);
 
     // Estruturas simuladas (Deverão vir do Grupo de Execução)
     unsigned char memory[MEMORY_SIZE] = {0};
     
-    // Inserindo dados fictícios para visualização
+    // Dados fictícios para visualização
     memory[0] = 0x14; memory[1] = 0x10; memory[2] = 0x33; // Instrução fictícia 1
     memory[3] = 0x48; memory[4] = 0x20; memory[5] = 0x00; // Instrução fictícia 2
     
@@ -26,8 +29,10 @@ int main(void) {
         if (IsKeyPressed(KEY_RIGHT)) pc = (pc + 3) % MEMORY_SIZE;
         if (IsKeyPressed(KEY_LEFT)) pc = (pc - 3 + MEMORY_SIZE) % MEMORY_SIZE;
 
+        // Construção visual inicial
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        //Limpa o fundo
+        ClearBackground(RAYWHITE);    
 
         // Cabeçalho da Interface
         DrawText("Monitoramento de Memória SIC/XE", 20, 20, 20, DARKGRAY);
@@ -54,7 +59,7 @@ int main(void) {
                 
                 Color textColor = BLACK;
                 
-                // Lógica de destaque: Uma palavra tem 3 bytes de tamanho
+                // verifica se a posição atual (memIdx) se encontra no intervalo exato da instrução apontada
                 if (memIdx >= pc && memIdx < pc + 3) {
                     // Desenha um fundo de destaque atrás do byte
                     DrawRectangle(startX + 80 + j * 30 - 2, startY + (i / BYTES_PER_ROW) * 20 - 2, 26, 22, LIGHTGRAY);
@@ -69,6 +74,7 @@ int main(void) {
         // Rodapé de instruções
         DrawText("Use as setas ESQUERDA/DIREITA para simular a mudança do PC", 20, 550, 16, GRAY);
 
+        // Processo visual encerra e atualiza a interface mostrada
         EndDrawing();
     }
 
