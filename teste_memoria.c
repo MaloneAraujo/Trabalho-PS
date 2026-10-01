@@ -6,8 +6,8 @@ int main() {
     inicializar_memoria();
     printf("START MEMORIA\n");
 
-    int endereco_alvo = 500;
-    uint32_t valor_original = 10;
+    int endereco_alvo = 4093; // Endereço máximo
+    uint32_t valor_original = 16777215; // Valor máximo
 
     printf("ESCREVENDO: %d END: %d\n", valor_original, endereco_alvo);
     escrever_word_24bits(endereco_alvo, valor_original);
