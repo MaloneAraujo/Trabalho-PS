@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define REG_A   0
+#define REG_A   0 //DEFN REGS
 #define REG_X   1
 #define REG_L   2
 #define REG_B   3
@@ -18,7 +18,7 @@ typedef struct {
 } Registrador;
 
 extern uint8_t memoria[4096];
-extern Registrador bancoRegistradores[10];
+extern Registrador bancoRegistradores[10]; //RESERVA MEMORIA
 
 void inicializar_memoria();
 uint32_t ler_word_24bits(int endereco);
