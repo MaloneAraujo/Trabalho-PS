@@ -1,12 +1,12 @@
 #include "memoria.h"
 
 
-uint8_t memoria[4096];
+uint8_t memoria[MEM_TAMANHO];
 Registrador bancoRegistradores[10];
 
-void inicializar_memoria() {
+void inicializar_memoria(void) {
 
-    for (int i = 0; i < 4096; i++) {
+    for (unsigned i = 0; i < MEM_TAMANHO; i++) {
         memoria[i] = 0;
     }
 
@@ -16,14 +16,14 @@ void inicializar_memoria() {
 }
 
 uint32_t ler_word_24bits(int endereco) { //FUNÇÃO PARA LER PALAVRA
-    if (endereco < 0 || endereco > 4093) return 0;
+    if (endereco < 0 || (unsigned)endereco > MEM_TAMANHO - 3) return 0;
     return (memoria[endereco] << 16) | 
            (memoria[endereco + 1] << 8) | 
            memoria[endereco + 2];
 }
 
 void escrever_word_24bits(int endereco, uint32_t valor) { //FUNÇÃO PARA ESCREVER PALAVRA
-    if (endereco < 0 || endereco > 4093) return;
+    if (endereco < 0 || (unsigned)endereco > MEM_TAMANHO - 3) return;
 
     memoria[endereco]     = (valor >> 16) & 0xFF;
     memoria[endereco + 1] = (valor >> 8)  & 0xFF;

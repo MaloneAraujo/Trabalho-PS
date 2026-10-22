@@ -2,6 +2,7 @@
 #define MEMORIA_H
 
 #include <stdint.h>
+#include "sicxe_config.h"
 
 #define REG_A   0 //DEFN REGS
 #define REG_X   1
@@ -17,10 +18,10 @@ typedef struct {
     uint64_t valor;
 } Registrador;
 
-extern uint8_t memoria[4096];
+extern uint8_t memoria[MEM_TAMANHO];
 extern Registrador bancoRegistradores[10]; //RESERVA MEMORIA
 
-void inicializar_memoria();
+void inicializar_memoria(void);
 uint32_t ler_word_24bits(int endereco);
 void escrever_word_24bits(int endereco, uint32_t valor);
 

@@ -1,0 +1,12 @@
+*.exe
+!/simulador-gui.exe
+!/simulador.exe
+!/montador.exe
+*.o
+simulador
+montador
+teste_montador
+teste_overflow
+teste_sim_real
+teste_integracao
+teste_instrucoes

@@ -1,0 +1,32 @@
+SIMULADOR E MONTADOR SIC/XE - C, COM INTERFACE RAYLIB
+
+Extraia todo o ZIP. Abra simulador-gui.exe com duplo clique.
+O exemplo soma.asm e montado automaticamente. Use Passo ou Executar.
+Arraste um .asm ou .obj para trocar de programa.
+Reiniciar restaura memoria e registradores; Recarregar/F5 rele o arquivo.
+
+Executar no terminal do Windows, dentro desta pasta:
+  .\montador.exe exemplos\soma.asm minha-soma.obj minha-soma.lst
+  .\simulador.exe minha-soma.obj
+Use nomes novos: o montador nao sobrescreve arquivos existentes.
+
+Compilar e testar (requer GCC):
+  .\compilar.ps1 -Testar -Executar
+
+Com Make: make, make teste, make executar.
+No MinGW, usar mingw32-make no lugar de make.
+
+Raylib 5.5 incluida em vendor/ para compilar no Windows x64 com MinGW.
+O executavel grafico nao exige instalar Raylib nem copiar DLLs adicionais.
+Leia INTERFACE.md para uso, validacao e detalhes da integracao grafica.
+Leia README.md para estruturas, funcoes, limites e decisoes do montador.
+README_ETAPA1.md registra o nucleo da primeira etapa, preservado nesta versao.
+
+Base do grupo preservada nesta versao:
+  memoria.c/.h                        Malone
+  decodificador.c/.h                  Gabriel Silveira
+  Aritimetica.c/.h                    Gabriel Britto
+  instrucoes_movimentacao_desvios.c/.h Joao Victor
+  sicxe.h e sim_real.c                integracao de Andre
+
+O montador esta separado em montagem/. Exemplos em exemplos/ e testes em testes/.

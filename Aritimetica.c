@@ -1,4 +1,5 @@
-#include <stdint.h>
+#include "Aritimetica.h"
+#include "sicxe_config.h"
 
 int32_t acumulador_a = 0;       //Esse aqui inicia o acumulador padrão em 0 e recebe a maioria dos resultados
 double acumulador_f = 0.0;      //Ja esse serve para o de ponto flutuante
@@ -9,11 +10,10 @@ const int32_t CC_MENOR = -1;
 const int32_t CC_IGUAL = 0;
 const int32_t CC_MAIOR = 1;
 
-int32_t limitar_24_bits(int32_t valor) {  // basicamente essa parte vai ser oque deixa limitado a 24bits, onde ele verifica se o 24bit é 1
-    if (valor & 0x00800000) {            // se ele for então vai enxer oque sobrar com 1
-        return valor | 0xFF000000; 
-    }
-    return valor & 0x00FFFFFF;  // aqui se não for ele só vai zerar tudo que passou do bit 24
+int32_t limitar_24_bits(int32_t valor) {
+    uint32_t bits = (uint32_t)valor & MASK24;
+    /* Converte complemento de dois de 24 bits sem conversao fora de int32_t. */
+    return (bits & 0x800000u) ? (int32_t)bits - 0x1000000 : (int32_t)bits;
 }
 
 // ***Daqui para baixo até a proxima marcação vão ser as funções do codigo condicional***
@@ -49,7 +49,8 @@ void fazer_sub(int32_t valor_memoria) { // mesma coisa que a anterior, mas traba
 }
 
 void fazer_mul(int32_t valor_memoria) { // igual, mas multiplica
-    acumulador_a = limitar_24_bits(acumulador_a * valor_memoria);
+    int64_t produto = (int64_t)acumulador_a * valor_memoria;
+    acumulador_a = limitar_24_bits((int32_t)((uint64_t)produto & MASK24));
 }
 
 void fazer_div(int32_t valor_memoria) { // aqui é a mesma coisa, mas divide e tem o if protegendo caso venha um 0 da memória
@@ -109,7 +110,8 @@ int32_t fazer_subr(int32_t reg1, int32_t reg2) { //Subtrai os 2 registradores, f
 }
 
 int32_t fazer_mulr(int32_t reg1, int32_t reg2) { //multiplica os registradores e tambem fazer o tratamento e retorna
-    return limitar_24_bits(reg2 * reg1);
+    int64_t produto = (int64_t)reg2 * reg1;
+    return limitar_24_bits((int32_t)((uint64_t)produto & MASK24));
 }
 
 int32_t fazer_divr(int32_t reg1, int32_t reg2) { // divide os registradores e verifica o 0 no denominador, fazer o tratamento e retorna
@@ -126,12 +128,25 @@ void fazer_compr(int32_t reg1, int32_t reg2) { // compara os regitradores e atua
 // ***Aqui em baixo eu faço as funções de deslocamento de bits***
 
                                                                         //LEMBRAR de ver o negocio do reg1
-int32_t fazer_shiftl(int32_t reg1, int quantidade_bits) { // empurra os bits para a esquerda que é multiplicar por 2 pra cada bit deslocado e isso faz
-    return limitar_24_bits(reg1 << quantidade_bits);         // o numero crescer então tem que arrumar para os 24bits
+int32_t fazer_shiftl(int32_t reg1, int quantidade_bits) {
+    uint32_t bits = (uint32_t)reg1 & MASK24;
+    if (quantidade_bits <= 0) return limitar_24_bits((int32_t)bits);
+    unsigned n = (unsigned)quantidade_bits % 24;
+    if (n == 0) return limitar_24_bits((int32_t)bits);
+    /* Rotacao: os bits que saem a esquerda voltam pela direita. */
+    uint32_t resultado = ((bits << n) | (bits >> (24 - n))) & MASK24;
+    return limitar_24_bits((int32_t)resultado);
 }
 
-int32_t fazer_shiftr(int32_t reg1, int quantidade_bits) { // aqui ele desloca para a direita que é dividir por 2 a cada bit deslocado, não aumante o valor então ok
-    return reg1 >> quantidade_bits; 
+int32_t fazer_shiftr(int32_t reg1, int quantidade_bits) {
+    uint32_t bits = (uint32_t)reg1 & MASK24;
+    if (quantidade_bits <= 0) return limitar_24_bits((int32_t)bits);
+    if (quantidade_bits >= 24) return (bits & 0x800000u) ? -1 : 0;
+    unsigned n = (unsigned)quantidade_bits;
+    uint32_t resultado = bits >> n;
+    /* Preenche os bits vagos com o sinal, sem deslocar inteiros negativos. */
+    if (bits & 0x800000u) resultado |= MASK24 ^ (MASK24 >> n);
+    return limitar_24_bits((int32_t)resultado);
 }
 
 //***Aqui fica a parte de conversão entre valores inteiros e flutuantes***

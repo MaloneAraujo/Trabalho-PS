@@ -1,19 +1,13 @@
 /*
- * sicxe.h - contrato entre a INTERFACE (partes 5 e 6) e o SIMULADOR (partes 1 a 4).
- *
- * A interface so conhece o que esta neste arquivo. Quem implementa o simulador
- * precisa fornecer as funcoes sim_* declaradas abaixo (em qualquer .c seu).
- * Enquanto o simulador real nao fica pronto, sim_stub.c faz um simulador falso.
+ * Contrato publico do nucleo. Usado pelo terminal e pelos testes nesta etapa.
+ * sim_real.c integra os modulos de memoria, decodificacao e instrucoes.
  */
 #ifndef SICXE_H
 #define SICXE_H
 
 #include <stddef.h>
 #include <stdint.h>
-
-#define MEM_TAMANHO (1u << 20)        /* 1 MB: enderecos de 20 bits (formato 4) */
-#define MASK24      0xFFFFFFu         /* registradores de 24 bits */
-#define MASK48      0xFFFFFFFFFFFFull /* registrador F de 48 bits */
+#include "sicxe_config.h"
 
 /* Resultado de sim_passo */
 enum { SIM_OK = 0, SIM_FIM = 1, SIM_ERRO = -1 };
@@ -26,18 +20,24 @@ typedef struct {
     size_t   mem_tam;  /* tamanho da memoria em bytes */
 } Maquina;
 
-/* Cria a maquina com a memoria alocada e zerada. Retorna NULL se falhar. */
+/* Cria uma visao do estado global e o zera. Uma maquina por vez nesta etapa. */
 Maquina *sim_criar(void);
 
 /* Libera a maquina. */
 void sim_destruir(Maquina *m);
 
-/* Zera registradores (inclusive PC). A memoria e mantida. */
+/* Zera registradores e volta PC para a entrada carregada. Mantem a memoria. */
 void sim_reset(Maquina *m);
 
 /* Carrega um programa do arquivo para a memoria e zera registradores.
- * Retorna 0 em sucesso; em falha retorna != 0 e escreve a mensagem em erro. */
+ * Retorna 0 em sucesso; em falha preserva o estado anterior e escreve erro. */
 int sim_carregar(Maquina *m, const char *caminho, char *erro, size_t erro_tam);
+
+/* Carrega imagem absoluta desde o endereco 0, sem arquivos intermediarios.
+ * Valida antes de alterar o estado; zera o restante da memoria e registradores.
+ * Permite usar m->mem como origem. Retorno: 0 sucesso, -1 erro. */
+int sim_carregar_imagem(Maquina *m, const uint8_t *imagem, size_t tamanho,
+                       uint32_t inicio, char *erro, size_t erro_tam);
 
 /* Executa UMA instrucao.
  * desc recebe um texto curto da instrucao executada (ex.: "000000: LDA #5"),

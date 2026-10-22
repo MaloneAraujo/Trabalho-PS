@@ -112,6 +112,7 @@ int calcularEndereco(
     uint32_t valor;
 
     int deslocamento;
+    (void)PC; /* O enderecamento relativo usa inst->proximoPC. */
 
 
     /* Instrucao SIC */
@@ -298,8 +299,17 @@ int decodificarInstrucao(
     inst->p = (byte2 >> 5) & 1;
     inst->e = (byte2 >> 4) & 1;
 
+    /* Em SIC (n=i=0), b/p/e sao parte do endereco, nao flags XE. */
+    if (inst->n == 0 && inst->i == 0) {
+        if (tamanhoMemoria - PC < 3) return 0;
+        inst->b = inst->p = inst->e = 0;
+        inst->endereco = ((uint32_t)(byte2 & 0x7F) << 8) | memoria[PC + 2];
+        inst->tamanho = inst->formato = 3;
+        inst->proximoPC = PC + 3;
+        return calcularEndereco(memoria, tamanhoMemoria, PC, X, B, inst);
+    }
 
-    if (inst->b && inst->p) {
+    if ((inst->b && inst->p) || (inst->e && (inst->b || inst->p))) {
         return 0;
     }
 
@@ -317,21 +327,7 @@ int decodificarInstrucao(
 
         inst->tamanho = 3;
 
-        /* SIC */
-
-        if (inst->n == 0 && inst->i == 0) {
-
-            inst->endereco =
-                ((byte2 & 0x7F) << 8) | byte3;
-        }
-
-        /* SIC/XE */
-
-        else {
-
-            inst->deslocamento =
-                ((byte2 & 0x0F) << 8) | byte3;
-        }
+        inst->deslocamento = ((byte2 & 0x0F) << 8) | byte3;
 
         inst->proximoPC = PC + 3;
     }
@@ -349,7 +345,7 @@ int decodificarInstrucao(
         byte3 = memoria[PC + 2];
         byte4 = memoria[PC + 3];
 
-        inst->tamanho = 4;
+        inst->tamanho = inst->formato = 4;
 
         inst->endereco =
             ((uint32_t)(byte2 & 0x0F) << 16)
