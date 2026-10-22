@@ -1,0 +1,24 @@
+LINHA ENDERECO CODIGO / FONTE
+    1 000000    . Demonstra formato 2, 4, endereco indireto e indexacao.
+    2 000100    MODOS   START 100
+    3 000100  B410  INICIO  CLEAR X
+    4 000102  0110FFFF          +LDA #65535
+    5 000106  0F2013          STA RESULT
+    6 000109  02200D          LDA @PONTE
+    7 00010C  050001          LDX #1
+    8 00010F  53A00D          LDCH TEXTO,X
+    9 000112  AC04          RMO A,S
+   10 000114  A44F          SHIFTL S,16
+   11 000116  3F2FFD  FIM     J FIM
+   12 000119  00011C  PONTE   WORD RESULT
+   13 00011C    RESULT  RESW 1
+   14 00011F  4142  TEXTO   BYTE C'AB'
+   15 000121            END INICIO
+
+TABELA DE SIMBOLOS (A=absoluto, R=endereco)
+MODOS                           00000100 R
+INICIO                          00000100 R
+FIM                             00000116 R
+PONTE                           00000119 R
+RESULT                          0000011C R
+TEXTO                           0000011F R

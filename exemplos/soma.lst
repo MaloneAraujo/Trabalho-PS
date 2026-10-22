@@ -1,0 +1,23 @@
+LINHA ENDERECO CODIGO / FONTE
+    1 000000    . Monta e executa uma soma, com chamada de subrotina e desvio condicional.
+    2 000000    SOMA    START 0
+    3 000000  010005  INICIO  LDA #5
+    4 000003  190003          ADD #3
+    5 000006  0F2015          STA RESULT
+    6 000009  290008          COMP #8
+    7 00000C  332003          JEQ CERTO
+    8 00000F  010063          LDA #99
+    9 000012  4B2003  CERTO   JSUB ROTINA
+   10 000015  3F2FFD  FIM     J FIM
+   11 000018  690007  ROTINA  LDB #7
+   12 00001B  4F0000          RSUB
+   13 00001E    RESULT  RESW 1
+   14 000021            END INICIO
+
+TABELA DE SIMBOLOS (A=absoluto, R=endereco)
+SOMA                            00000000 R
+INICIO                          00000000 R
+CERTO                           00000012 R
+FIM                             00000015 R
+ROTINA                          00000018 R
+RESULT                          0000001E R

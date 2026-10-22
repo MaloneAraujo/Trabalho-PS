@@ -1,0 +1,19 @@
+LINHA ENDERECO CODIGO / FONTE
+    1 000000    . BASE informa o montador; LDB carrega de fato o registrador B.
+    2 000000    BASES   START 0
+    3 000000  69100BB8  INICIO  +LDB #DADOS
+    4 000004            BASE DADOS
+    5 000004  034000          LDA DADOS
+    6 000007            NOBASE
+    7 000007  3F2FFD  FIM     J FIM
+    8 00000A            ORG 3000
+    9 000BB8  00002A  DADOS   WORD 42
+   10 000BBB    TAMANHO EQU *-DADOS
+   11 000BBB            END INICIO
+
+TABELA DE SIMBOLOS (A=absoluto, R=endereco)
+BASES                           00000000 R
+INICIO                          00000000 R
+FIM                             00000007 R
+DADOS                           00000BB8 R
+TAMANHO                         00000003 A
