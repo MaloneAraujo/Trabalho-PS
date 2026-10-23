@@ -72,10 +72,7 @@ Fontes C padrao e Makefile preparados para outros sistemas; Linux nao foi testad
 
 ## Como o montador funciona
 
-O capitulo 10 fornecido pelo grupo, especialmente as secoes 10.4.2 e 10.5 e as
-Figuras 10.2/10.3, fundamenta o algoritmo: MOT, POT, tabela de simbolos e contador
-de localizacao. Seus exemplos sao para a familia 68000; nao foram copiados como
-instrucoes SIC/XE. Aqui `BYTE`/`WORD` inicializam dados e `RESB`/`RESW` reservam
+Aqui `BYTE`/`WORD` inicializam dados e `RESB`/`RESW` reservam
 espaco, exercendo os papeis de `DC` e `DS` do texto. Uma WORD SIC/XE tem 3 bytes.
 
 1. **Passo 1:** separa rotulo/operacao/operando, consulta MOT/POT, calcula tamanhos,
