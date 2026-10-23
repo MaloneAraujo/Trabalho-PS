@@ -196,4 +196,3 @@ Total: 272 verificacoes nas quatro baterias em C e na CLI, mais os dois casos
 adicionais de overflow.
 
 Os testes nao sao uma prova de cobertura completa de toda a arquitetura SIC/XE.
-Nao houve commit nem publicacao no GitHub nesta etapa.
