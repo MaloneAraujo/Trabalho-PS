@@ -7,9 +7,6 @@ No Windows x64, abra `simulador-gui.exe` dentro da pasta extraida.
 Mantenha a pasta `exemplos` junto ao executavel. Nao e necessario instalar GCC
 para usar os executaveis incluidos; GCC e necessario apenas para recompilar.
 
-O [roteiro do video da equipe](docs/roteiro_video_sicxe_equipe.pdf) indica as
-falas, os arquivos e as linhas de codigo para a apresentacao.
-
 ## Sobre o projeto
 
 Versao integrada com a interface Raylib original do grupo. Abra `simulador-gui.exe`
