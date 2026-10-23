@@ -77,6 +77,3 @@ nao depende da Raylib. Linux nao foi validado.
   estavel, Espaco, F5, botao Recarregar e rolagem de memoria.
 - Arrastar arquivos e editar o campo hexadecimal nao foram validados por automacao
   de interface. A carga `.obj` e os erros de carga/montagem foram validados em C.
-
-As pastas originais, etapa1 e etapa2 permanecem intactas. Nenhum commit ou push
-foi realizado nesta integracao.
