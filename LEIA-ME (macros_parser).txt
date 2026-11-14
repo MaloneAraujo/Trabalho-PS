@@ -1,0 +1,18 @@
+PACOTE PARTE DO GABRIEL SILVEIRA
+
+Conteudo:
+- montagem/macros_parser.c
+- montagem/macros_parser.h
+- testes/teste_macros_parser.c
+
+Compilar e executar os testes na pasta deste pacote:
+
+  gcc -std=c11 -Wall -Wextra -Wpedantic -Werror -O2 \
+      -Imontagem montagem/macros_parser.c testes/teste_macros_parser.c \
+      -o teste_macros_parser
+  ./teste_macros_parser
+
+Resultado verificado: 45 testes aprovados; 0 falhas.
+
+Nenhum arquivo do GitHub foi alterado, e nenhum arquivo dos outros integrantes
+foi modificado.

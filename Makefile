@@ -1,7 +1,7 @@
 # Simulador original em Raylib + ferramentas de terminal.
 CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -Wpedantic -O2
-CPPFLAGS = -I.
+CPPFLAGS = -I. -Imontagem
 LDLIBS = -lm
 ifeq ($(OS),Windows_NT)
 EXE = .exe
@@ -15,7 +15,9 @@ endif
 NUCLEO = memoria.c decodificador.c Aritimetica.c instrucoes_movimentacao_desvios.c sim_real.c
 CABECALHOS = sicxe_config.h sicxe.h memoria.h decodificador.h Aritimetica.h instrucoes_movimentacao_desvios.h
 MONTADOR = montagem/parser.c montagem/tabelas.c montagem/passos.c montagem/objeto.c
-ASM_HEADERS = montagem/montador.h montagem/interno.h sicxe_config.h
+MACROS = montagem/macros.c montagem/macros_parser.c montagem/macros_definicao.c montagem/macros_tabela.c montagem/macros_expansao.c
+MONTADOR += $(MACROS) montagem/macro_montador.c
+ASM_HEADERS = montagem/montador.h montagem/interno.h montagem/macros.h montagem/macros_interno.h montagem/macros_parser.h sicxe_config.h
 
 .PHONY: all terminal teste executar interface clean
 all: terminal interface
@@ -46,15 +48,35 @@ teste_integracao$(EXE): testes/teste_integracao.c $(NUCLEO) $(CABECALHOS)
 teste_instrucoes$(EXE): testes/teste_instrucoes.c $(NUCLEO) $(CABECALHOS)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ testes/teste_instrucoes.c $(NUCLEO) $(LDLIBS)
 
-teste: teste_sim_real$(EXE) teste_integracao$(EXE) teste_instrucoes$(EXE) teste_montador$(EXE) teste_programa$(EXE)
+teste_macros_parser$(EXE): testes/teste_macros_parser.c montagem/macros_parser.c montagem/macros_parser.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ testes/teste_macros_parser.c montagem/macros_parser.c
+
+teste_macros_tabela$(EXE): testes/teste_macros_tabela.c montagem/macros_tabela.c montagem/macros_interno.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ testes/teste_macros_tabela.c montagem/macros_tabela.c
+
+teste_expansao$(EXE): testes/teste_expansao.c montagem/macros_expansao.c montagem/macros_interno.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ testes/teste_expansao.c montagem/macros_expansao.c
+
+teste_macros$(EXE): testes/teste_macros.c montagem/macros_parser.c montagem/macros_definicao.c montagem/macros_tabela.c montagem/macros_expansao.c $(ASM_HEADERS)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ testes/teste_macros.c montagem/macros_parser.c montagem/macros_definicao.c montagem/macros_tabela.c montagem/macros_expansao.c
+
+teste_interface_macros$(EXE): testes/teste_interface_macros.c programa.c programa.h $(MONTADOR) $(ASM_HEADERS) $(NUCLEO) $(CABECALHOS)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ testes/teste_interface_macros.c programa.c $(MONTADOR) $(NUCLEO) $(LDLIBS)
+
+teste: teste_sim_real$(EXE) teste_integracao$(EXE) teste_instrucoes$(EXE) teste_montador$(EXE) teste_programa$(EXE) teste_macros_parser$(EXE) teste_macros_tabela$(EXE) teste_expansao$(EXE) teste_macros$(EXE) teste_interface_macros$(EXE)
 	./teste_sim_real$(EXE) exemplo.obj
 	./teste_integracao$(EXE)
 	./teste_instrucoes$(EXE)
 	./teste_montador$(EXE)
 	./teste_programa$(EXE)
+	./teste_macros_parser$(EXE)
+	./teste_macros_tabela$(EXE)
+	./teste_expansao$(EXE)
+	./teste_macros$(EXE)
+	./teste_interface_macros$(EXE)
 
 executar: simulador$(EXE)
 	./simulador$(EXE) exemplo.obj
 
 clean:
-	rm -f simulador$(EXE) simulador-gui$(EXE) montador$(EXE) teste_programa$(EXE) teste_montador$(EXE) teste_sim_real$(EXE) teste_integracao$(EXE) teste_instrucoes$(EXE)
+	rm -f simulador$(EXE) simulador-gui$(EXE) montador$(EXE) teste_programa$(EXE) teste_montador$(EXE) teste_sim_real$(EXE) teste_integracao$(EXE) teste_instrucoes$(EXE) teste_macros_parser$(EXE) teste_macros_tabela$(EXE) teste_expansao$(EXE) teste_macros$(EXE) teste_interface_macros$(EXE)

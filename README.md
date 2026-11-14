@@ -110,6 +110,19 @@ Para integrar por C, aloque `Montagem` com `calloc` (estrutura grande), passe o
 chame os escritores. Retornos da API: 1=sucesso, 0=erro. Feche os arquivos e libere
 o contexto. O montador nao usa estado global mutavel e nao modifica a maquina.
 
+## Processador de macros
+
+Os fontes relacionados a macros ficam em `montagem/`: `macros.c` e `macro_montador.c`
+coordenam o processamento em uma passagem e a geracao de `MASMAPRG.ASM`;
+`macros_parser.c/.h` analisa definicoes e chamadas; `macros_definicao.c` controla
+niveis de definicao aninhada e substituicao posicional `#(d,i)`; `macros_tabela.c`
+armazena definicoes e corpos; `macros_expansao.c` controla a pilha de expansao e
+a substituicao de parametros. Os testes correspondentes ficam em
+`testes/teste_macros_parser.c`, `testes/teste_macros_tabela.c`,
+`testes/teste_expansao.c`, `testes/teste_macros.c` e
+`testes/teste_interface_macros.c`. O exemplo de definicoes e chamadas aninhadas
+esta em `exemplos/macros_aninhadas.asm`.
+
 ## Linguagem aceita
 
 Linhas: `[ROTULO] OPERACAO [OPERANDO]`. Rotulo pode terminar em `:`. Operacoes e

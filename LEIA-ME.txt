@@ -30,3 +30,20 @@ Base do grupo preservada nesta versao:
   sicxe.h e sim_real.c                integracao de Andre
 
 O montador esta separado em montagem/. Exemplos em exemplos/ e testes em testes/.
+
+ARQUIVOS DA PARTE DE MACROS
+
+  montagem/macros_interno.h          Estruturas e contratos internos (Malone).
+  montagem/macros_tabela.c           Tabela de definicoes e armazenamento (Malone).
+  montagem/macros_parser.c/.h        Parser de definicoes e chamadas (Gabriel Silveira).
+  montagem/macros_definicao.c        Definicoes aninhadas e parametros formais (Gabriel Britto).
+  montagem/macros_expansao.c         Expansao e chamadas aninhadas (Joao Victor).
+  montagem/macros.h, macros.c,       Controlador de uma passagem e integrador
+  montagem/macro_montador.c          que gera MASMAPRG.ASM (Andre).
+  programa.c, Makefile, compilar.ps1 Integracao grafica e compilacao (Vitor).
+  testes/teste_macros.c              Teste integrado dos modulos de macros (Yago).
+  exemplos/macros_aninhadas.asm      Exemplo de definicao e chamada aninhada (Yago).
+  testes/teste_macros_parser.c       Testes do parser.
+  testes/teste_macros_tabela.c       Testes da tabela de definicoes.
+  testes/teste_expansao.c            Testes da pilha e substituicao na expansao.
+  testes/teste_interface_macros.c    Testes ponta a ponta de processar_macros e GUI.

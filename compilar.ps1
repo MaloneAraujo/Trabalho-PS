@@ -2,8 +2,10 @@ param([switch]$Testar, [switch]$Executar, [switch]$VerificarOverflow, [switch]$S
 $ErrorActionPreference = 'Stop'
 $gccEtapa1 = (Get-Command gcc -ErrorAction Stop).Source
 $nucleoEtapa1 = @('memoria.c','decodificador.c','Aritimetica.c','instrucoes_movimentacao_desvios.c','sim_real.c')
-$opcoesEtapa1 = @('-std=c11','-Wall','-Wextra','-Wpedantic','-O2','-I.')
+$opcoesEtapa1 = @('-std=c11','-Wall','-Wextra','-Wpedantic','-O2','-I.','-Imontagem')
 $fontesMontador = @('montagem/parser.c','montagem/tabelas.c','montagem/passos.c','montagem/objeto.c')
+$fontesMacros = @('montagem/macros.c','montagem/macros_parser.c','montagem/macros_definicao.c','montagem/macros_tabela.c','montagem/macros_expansao.c')
+$fontesMontador += $fontesMacros + @('montagem/macro_montador.c')
 
 function Compilar-Etapa1([string]$fonte, [string]$saida, [string[]]$extras = @()) {
     & $gccEtapa1 @opcoesEtapa1 @extras $fonte @nucleoEtapa1 '-lm' '-o' $saida
@@ -36,6 +38,18 @@ try {
         & $gccEtapa1 @opcoesEtapa1 'testes/teste_programa.c' 'programa.c' @fontesMontador @nucleoEtapa1 '-lm' '-o' 'teste_programa.exe'
         if ($LASTEXITCODE -ne 0) { throw 'Falha ao compilar testes da ponte grafica' }
         Executar-Etapa1 'teste_programa.exe'
+        $testesMacros = @(
+            @{ Nome='teste_macros_parser'; Fontes=@('montagem/macros_parser.c') },
+            @{ Nome='teste_macros_tabela'; Fontes=@('montagem/macros_tabela.c') },
+            @{ Nome='teste_expansao'; Fontes=@('montagem/macros_expansao.c') },
+            @{ Nome='teste_macros'; Fontes=@('montagem/macros_parser.c','montagem/macros_definicao.c','montagem/macros_tabela.c','montagem/macros_expansao.c') },
+            @{ Nome='teste_interface_macros'; Fontes=(@('programa.c') + $fontesMontador + $nucleoEtapa1) }
+        )
+        foreach ($testeMacro in $testesMacros) {
+            & $gccEtapa1 @opcoesEtapa1 ("testes/" + $testeMacro.Nome + '.c') @($testeMacro.Fontes) '-lm' '-o' ($testeMacro.Nome + '.exe')
+            if ($LASTEXITCODE -ne 0) { throw ("Falha ao compilar " + $testeMacro.Nome) }
+            Executar-Etapa1 ($testeMacro.Nome + '.exe')
+        }
         & (Join-Path $PSScriptRoot 'testes/teste_cli.ps1')
     }
     if ($VerificarOverflow) {

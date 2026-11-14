@@ -10,9 +10,10 @@ montado e carregado automaticamente. Nao e necessario instalar a Raylib para exe
 - **Executar/Pausar**: avanca uma instrucao a cada 0,15 segundo ou pausa.
 - **Reiniciar**: restaura a imagem originalmente carregada, incluindo memoria,
   registradores e endereco inicial. Nao rele o arquivo do disco.
-- **Recarregar** ou **F5**: rele o arquivo atual; se for `.asm`, monta novamente.
+- **Recarregar** ou **F5**: rele o arquivo atual; se for `.asm`, processa macros e monta novamente.
 - Arraste um arquivo **.asm** ou **.obj** para a janela para trocar de programa.
-  Assembly e montado em memoria, sem criar ou sobrescrever objetos no disco.
+  Assembly passa pelo processador de macros, que gera `MASMAPRG.ASM` no diretorio
+  de trabalho, e depois e montado em memoria, sem sobrescrever objetos no disco.
 - Campo de memoria: apague o endereco com Backspace, digite hexadecimal e Enter.
   Intervalo valido nesta versao: `000000` a `000FFF` (4096 bytes).
 - Roda do mouse sobre a memoria: navega pelas linhas de 16 bytes.
@@ -36,7 +37,7 @@ O log mostra as seis entradas mais recentes; mensagens muito longas ficam recort
 
 - `main.c`, `memview.c` e `memview.h` vieram do projeto original enviado pelo grupo.
   Layout de registradores, memoria e log mantido.
-- `programa.c/.h`: ponte sem dependencia grafica. `.asm` passa pelo montador;
+- `programa.c/.h`: ponte sem dependencia grafica. `.asm` passa por `montar_com_macros`;
   demais arquivos passam pelo carregador existente. Uma falha preserva a maquina.
 - `sim_carregar_imagem`, em `sim_real.c` (contrato em `sicxe.h`): aplica uma
   imagem validada, permitindo montagem em memoria e reinicio completo.
@@ -77,3 +78,14 @@ nao depende da Raylib. Linux nao foi validado.
   estavel, Espaco, F5, botao Recarregar e rolagem de memoria.
 - Arrastar arquivos e editar o campo hexadecimal nao foram validados por automacao
   de interface. A carga `.obj` e os erros de carga/montagem foram validados em C.
+
+  ## Exemplo de macros aninhadas
+
+O arquivo `exemplos/macros_aninhadas.asm` demonstra duas definicoes: `DUPLA`
+realiza uma chamada a `SOMA` em seu corpo. A chamada externa fornece o argumento
+`VALOR`, que e repassado para a macro interna. O exemplo serve para apresentar a
+ordem de expansao e a substituicao de parametros.
+
+Observacao: a execucao desse fonte exige que o controlador completo de macros
+esteja integrado ao montador. O teste integrado disponivel valida parser, tabela
+e expansao em memoria, mas nao gera um objeto SIC/XE pela rotina `processar_macros`.
