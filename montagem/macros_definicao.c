@@ -350,10 +350,6 @@ void trocar_params(const ContextoDef *ctx, const char *linha, char *saida) {
 }
 
 
-// ============================================================================
-// 5. FUNCOES PRINCIPAIS DO MODO DE DEFINICAO (CHAMADAS PELOS OUTROS MODULOS)
-// ============================================================================
-
 // Aqui quando inificar uma definicao ele va colocar no nivel d 1
 int iniciar_def(
     ContextoDef *ctx,
